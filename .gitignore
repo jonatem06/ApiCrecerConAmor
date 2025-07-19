@@ -1,0 +1,10 @@
+# Rust
+/target
+.DS_Store
+
+# Env
+.env
+
+# IDEs
+.idea/
+.vscode/
