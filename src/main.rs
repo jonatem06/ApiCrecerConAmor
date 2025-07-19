@@ -36,6 +36,8 @@ async fn main() -> std::io::Result<()> {
 
     info!("Starting server at http://localhost:8080");
 
+    let server_address = std::env::var("SERVER_ADDRESS").unwrap_or_else(|_| "0.0.0.0:8080".to_string());
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(schema.clone()))
@@ -43,7 +45,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/").to(graphql_playground))
             .route("/health", web::get().to(health_check))
     })
-    .bind("0.0.0.0:8080")?
+    .bind(&server_address)?
     .run()
     .await
 }
