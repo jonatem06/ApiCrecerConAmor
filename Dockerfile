@@ -1,21 +1,12 @@
-# Etapa de construcción
-FROM rust:1.78 as builder
+FROM rust:1.88 AS dev
 
-WORKDIR /usr/src/app
+WORKDIR /app
+
+# Instala cargo-watch
+RUN cargo install cargo-watch
 
 COPY . .
 
-RUN cargo install --path .
-
-# Etapa de ejecución
-FROM debian:buster-slim
-
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /usr/local/cargo/bin/api_rust_graphql /usr/local/bin/api_rust_graphql
-
-COPY .env.example .env
-
 EXPOSE 8080
 
-CMD ["api_rust_graphql"]
+CMD ["cargo", "watch", "-x", "run"]
